@@ -36,10 +36,11 @@ class SEG(object):
         tmp = re.sub("。|，|,|！|…|!|《|》|<|>|\"|'|:|：|？|\?|、|\||“|”|‘|’|；|—|（|）|·|\(|\)|　"," ",piece).split()
         for t in tmp:
             ut = t.decode('utf-8')
-            if re.search(r"\w",ut)!=None:
-                R.append(ut.encode('utf-8'))
-            else:
-                R.extend(self._suffix_ary(ut))
+            mc = re.findall(r"([0-9A-Za-z\-\+#@_\.]+)",ut)
+            if (mc!=None) and (len(mc)>0):
+                R.extend([xx.encode('utf-8') for xx in mc])
+                ut = re.sub(r"([0-9A-Za-z\-\+#@_\.]+)","",ut)
+            R.extend(self._suffix_ary(ut))
         return R
         
     def cut(self,text):
