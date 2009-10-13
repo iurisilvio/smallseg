@@ -23,10 +23,25 @@ class SEG(object):
                 p = p[char]
         
         pass
-        
-    def _pro_unreg(self,piece):
-        return re.sub("。|，|,|！|…|!|《|》|<|>|\"|'|:|：|？|\?|、|\||“|”|‘|’|；|—|（|）|·|\(|\)|　"," ",piece).split()
     
+    def _suffix_ary(self,s):
+        ln = len(s)
+        R = []
+        for i in xrange(0,ln):
+            R.append(s[i:].encode('utf-8'))
+        return R
+    
+    def _pro_unreg(self,piece):
+        R = []
+        tmp = re.sub("。|，|,|！|…|!|《|》|<|>|\"|'|:|：|？|\?|、|\||“|”|‘|’|；|—|（|）|·|\(|\)|　"," ",piece).split()
+        for t in tmp:
+            ut = t.decode('utf-8')
+            if re.search(r"\w",ut)!=None:
+                R.append(ut.encode('utf-8'))
+            else:
+                R.extend(self._suffix_ary(ut))
+        return R
+        
     def cut(self,text):
         """
         """
