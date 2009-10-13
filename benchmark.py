@@ -14,7 +14,7 @@ seg.set(words)
 print "Dict is OK."
 from time import time
 
-for i in xrange(1,21):
+for i in xrange(1,101):
     start = time()
     for j in xrange(0,i):
         A,B = seg.cut(s3) #A是识别出的登录词列表，B是未登录词列表

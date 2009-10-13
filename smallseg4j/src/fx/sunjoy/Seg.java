@@ -6,9 +6,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,7 +23,7 @@ class SegResult{
 }
 
 public class Seg {
-	private Map<Character, Map> d = new HashMap<Character, Map>();
+	private Map<Character, Map> d = new TreeMap<Character, Map>();
 	
 	public void useDefaultDict(){
 		try {
@@ -54,7 +54,7 @@ public class Seg {
 			for(int i=0;i<word.length();i++){
 				Character cc = Character.toLowerCase(word.charAt(i));
 				if(p == null){
-					q.put(k, new HashMap<Character,Object>());
+					q.put(k, new TreeMap<Character,Object>());
 					p = q.get(k);
 				}
 				if(!p.containsKey(cc)){

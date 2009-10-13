@@ -11,7 +11,7 @@ public class Benchmark {
 		seg.useDefaultDict();
 		File textFile = new File(Thread.currentThread().getContextClassLoader().getResource("fx/sunjoy/text.txt").getPath());
 		String text = FileUtils.readFileToString(textFile,"utf-8");
-		for(int i=1;i<21;i++){
+		for(int i=1;i<101;i++){
 			long start = System.currentTimeMillis();
 			for(int j=0;j<i;j++)
 				seg.cut(text);
