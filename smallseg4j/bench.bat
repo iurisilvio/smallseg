@@ -1,0 +1,1 @@
+java -server -cp .\bin;.\lib\commons-io-1.3.2.jar fx.sunjoy.Benchmark
