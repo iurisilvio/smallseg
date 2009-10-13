@@ -28,12 +28,15 @@ class SEG(object):
         ln = len(s)
         R = []
         for i in xrange(0,ln):
-            R.append(s[i:].encode('utf-8'))
+            tmp = s[i:]
+            if len(tmp)>1:
+                R.append(tmp.encode('utf-8'))
         return R
     
     def _pro_unreg(self,piece):
         R = []
         tmp = re.sub("。|，|,|！|…|!|《|》|<|>|\"|'|:|：|？|\?|、|\||“|”|‘|’|；|—|（|）|·|\(|\)|　"," ",piece).split()
+        
         for t in tmp:
             ut = t.decode('utf-8')
             mc = re.findall(r"([0-9A-Za-z\-\+#@_\.]+)",ut)
