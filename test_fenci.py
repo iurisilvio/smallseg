@@ -9,7 +9,7 @@ seg = SEG()
 print 'Load dict...'
 seg.set(words)
 print "Dict is OK."
-A,B = seg.cut(s3)
+A,B = seg.cut(s3) #A是识别出的登录词列表，B是为登录词列表
 for t in A:
     try:
         print t.decode('utf-8')
