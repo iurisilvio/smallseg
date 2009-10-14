@@ -85,9 +85,13 @@ public class Seg {
 			List<String> mc = findAll("([0-9A-Za-z\\-\\+#@_\\.]+)",ut);
 			if(mc.size()>0){
 				R.addAll(mc);
-				ut = ut.replaceAll("([0-9A-Za-z\\-\\+#@_\\.]+)","");
+				String[] han =  ut.split("([0-9A-Za-z\\-\\+#@_\\.]+)");
+				for(String h : han){
+					R.addAll(_suffix_ary(h));
+				}
+			}else{
+				R.addAll(_suffix_ary(ut));
 			}
-			R.addAll(_suffix_ary(ut));
 		}
 		return R;
 	}
