@@ -42,8 +42,11 @@ class SEG(object):
             mc = re.findall(r"([0-9A-Za-z\-\+#@_\.]+)",ut)
             if (mc!=None) and (len(mc)>0):
                 R.extend([xx.encode('utf-8') for xx in mc])
-                ut = re.sub(r"([0-9A-Za-z\-\+#@_\.]+)","",ut)
-            R.extend(self._suffix_ary(ut))
+                han = re.split(r"[0-9A-Za-z\-\+#@_\.]+",ut)
+                for h in han:
+                    R.extend(self._suffix_ary(h))
+            else:
+                R.extend(self._suffix_ary(ut))
         return R
         
     def cut(self,text):
