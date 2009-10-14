@@ -12,15 +12,7 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class SegResult{
-	public List<String> recognised;
-	
-	public List<String> unrecognised;
-	
-	public String toString(){
-		return "r:"+recognised+"\r\nu:"+unrecognised;
-	}
-}
+
 
 public class Seg {
 	private Map<Character, Map> d = new TreeMap<Character, Map>();
