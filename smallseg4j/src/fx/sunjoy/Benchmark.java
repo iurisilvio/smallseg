@@ -9,7 +9,7 @@ public class Benchmark {
 	public static void main(String[] args) throws IOException {
 		Seg seg = new Seg();
 		seg.useDefaultDict();
-		File textFile = new File(Thread.currentThread().getContextClassLoader().getResource("fx/sunjoy/text.txt").getPath());
+		File textFile = new File(Thread.currentThread().getContextClassLoader().getResource("fx/sunjoy/text.txt").getPath().replace("%20", " "));
 		String text = FileUtils.readFileToString(textFile,"utf-8");
 		for(int i=1;i<101;i++){
 			long start = System.currentTimeMillis();
