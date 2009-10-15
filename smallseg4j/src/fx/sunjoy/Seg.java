@@ -41,9 +41,9 @@ public class Seg {
 		Map<Character,Map> q = null;
 		Character k = null;
 		for(String word: words){
-			word += (char)11;
+			word = (char)11+word;
 			p = d;
-			for(int i=0;i<word.length();i++){
+			for(int i=word.length()-1;i>=0;i--){
 				Character cc = Character.toLowerCase(word.charAt(i));
 				if(p == null){
 					q.put(k, new TreeMap<Character,Object>());
@@ -98,17 +98,18 @@ public class Seg {
 	
 	public SegResult cut(String text){
 		Map<Character,Map> p = d;
-		int i=0;
+		int ln = text.length();
+		int i=ln;
 		int j=0;
-		int z=0;
+		int z=ln;
 		List<String> recognised = new ArrayList<String>();
 		List<String> unrecognised = new ArrayList<String>();
-		int ln = text.length();
-		while(i+j<ln){
-			Character t = Character.toLowerCase(text.charAt(i+j));
+		
+		while(i-j>0){
+			Character t = Character.toLowerCase(text.charAt(i-1-j));
 			if(!p.containsKey(t)){
 				j = 0;
-				i++;
+				i--;
 				p = d;
 				continue;
 			}
@@ -116,14 +117,15 @@ public class Seg {
 			j++;
 			if(p.containsKey((char)11)){
 				p = d;
-				recognised.add(text.substring(i,i+j));
-				unrecognised.addAll(_pro_unreg(text.substring(z,i)));
-				i = i+j;
+				recognised.add(text.substring(i-j,i));
+				if(i<ln)
+					unrecognised.addAll(_pro_unreg(text.substring(i,z)));
+				i = i-j;
 				z = i;
 				j = 0;
 			}
 		}
-		unrecognised.addAll(_pro_unreg(text.substring(z,i+j)));
+		unrecognised.addAll(_pro_unreg(text.substring(i-j,z)));
 		SegResult result = new SegResult();
 		result.recognised = recognised;
 		result.unrecognised = unrecognised;
@@ -139,6 +141,6 @@ public class Seg {
 		words.add("北京");
 		seg.set(words);
 		System.out.println(seg.d);
-		System.out.println(seg.cut("abcdefg love北京 adfxxx我爱你"));
+		System.out.println(seg.cut("abc lxx adf我爱北京"));
 	}
 }
