@@ -9,10 +9,11 @@ class SEG(object):
         q = {}
         k = ''
         for word in keywords:
-            word += chr(11)
+            word = chr(11)+word
             p = self.d
-            for char in word:
-                char = char.lower()
+            ln = len(word)
+            for i in xrange(ln-1,-1,-1):
+                char = word[i].lower()
                 if p=='':
                     q[k] = {}
                     p = q[k]
@@ -53,28 +54,31 @@ class SEG(object):
         """
         """
         p = self.d
-        i = 0 
+        ln = len(text)
+        i = ln 
         j = 0
-        z = 0
+        z = ln
         recognised = []
         unrecognised = []
-        ln = len(text)
-        while i+j<ln:
-            t = text[i+j].lower()
+        
+        while i-j>0:
+            t = text[i-j-1].lower()
             if not (t in p):
                 j = 0
-                i += 1
+                i -= 1
                 p = self.d
                 continue
             p = p[t]
             j+=1
             if chr(11) in p:
                 p = self.d
-                recognised.append(text[i:i+j])
-                unrecognised.extend(self._pro_unreg(text[z:i]))
-                i = i+j
+                #print i,j
+                recognised.append(text[i-j:i])
+                if(i<ln):
+                    unrecognised.extend(self._pro_unreg(text[i:z]))
+                i = i-j
                 z = i
                 j = 0
-        unrecognised.extend(self._pro_unreg(text[z:i+j]))
+        unrecognised.extend(self._pro_unreg(text[i-j:z]))
         return (recognised,unrecognised)
         
