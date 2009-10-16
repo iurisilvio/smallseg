@@ -9,7 +9,7 @@ class SEG(object):
         q = {}
         k = ''
         for word in keywords:
-            word = chr(11)+word
+            word = (chr(11)+word).decode('utf-8')
             p = self.d
             ln = len(word)
             for i in xrange(ln-1,-1,-1):
@@ -25,45 +25,58 @@ class SEG(object):
         
         pass
     
-    def _suffix_ary(self,s):
+    def _binary_seg(self,s):
         ln = len(s)
+        if ln==1:
+            return [s]
         R = []
-        for i in xrange(0,ln):
-            tmp = s[i:]
-            if len(tmp)>1:
-                R.append(tmp.encode('utf-8'))
+        for i in xrange(ln,1,-1):
+            tmp = s[i-2:i]
+            R.append(tmp)
         return R
     
     def _pro_unreg(self,piece):
         R = []
-        tmp = re.sub("。|，|,|！|…|!|《|》|<|>|\"|'|:|：|？|\?|、|\||“|”|‘|’|；|—|（|）|·|\(|\)|　"," ",piece).split()
-        
-        for t in tmp:
-            ut = t.decode('utf-8')
-            mc = re.findall(r"([0-9A-Za-z\-\+#@_\.]+)",ut)
-            if (mc!=None) and (len(mc)>0):
-                R.extend([xx.encode('utf-8') for xx in mc])
-                han = re.split(r"[0-9A-Za-z\-\+#@_\.]+",ut)
-                for h in han:
-                    R.extend(self._suffix_ary(h))
-            else:
-                R.extend(self._suffix_ary(ut))
+        tmp = re.sub(u"。|，|,|！|…|!|《|》|<|>|\"|'|:|：|？|\?|、|\||“|”|‘|’|；|—|（|）|·|\(|\)|　|和|的|了"," ",piece).split()
+        ln1 = len(tmp)
+        for i in xrange(len(tmp)-1,-1,-1):
+            mc = re.split(r"([0-9A-Za-z\-\+#@_\.]+)",tmp[i])
+            for j in xrange(len(mc)-1,-1,-1):
+                r = mc[j]
+                if re.search(r"([0-9A-Za-z\-\+#@_\.]+)",r)!=None:
+                    R.append(r)
+                else:
+                    R.extend(self._binary_seg(r))
         return R
+        
         
     def cut(self,text):
         """
         """
+        text = text.decode('utf-8','ignore')
         p = self.d
         ln = len(text)
         i = ln 
         j = 0
         z = ln
         recognised = []
-        unrecognised = []
-        
+        mem = None
         while i-j>0:
             t = text[i-j-1].lower()
+            #print i,j,t,mem
             if not (t in p):
+                if mem!=None:
+                    i,j,z = mem
+                    p = self.d
+                    if(i<ln):
+                        recognised.extend(self._pro_unreg(text[i:z]))
+                    recognised.append(text[i-j:i])
+                    i = i-j
+                    z = i
+                    j = 0
+                    mem = None
+                    continue
+                
                 j = 0
                 i -= 1
                 p = self.d
@@ -71,14 +84,19 @@ class SEG(object):
             p = p[t]
             j+=1
             if chr(11) in p:
+                if (j<=2) and (len(p)>1):
+                    mem = i,j,z
+                    continue
+                    #print mem
                 p = self.d
                 #print i,j
+                if((i<ln) and (i<z)):
+                    recognised.extend(self._pro_unreg(text[i:z]))
                 recognised.append(text[i-j:i])
-                if(i<ln):
-                    unrecognised.extend(self._pro_unreg(text[i:z]))
                 i = i-j
                 z = i
                 j = 0
-        unrecognised.extend(self._pro_unreg(text[i-j:z]))
-        return (recognised,unrecognised)
-        
+                mem = None
+       
+        recognised.extend(self._pro_unreg(text[i-j:z]))
+        return recognised

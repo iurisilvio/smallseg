@@ -11,25 +11,26 @@ seg.set(words)
 print "Dict is OK."
 
 
-
-def test1(text):
-    A,B = seg.cut(text) #A是识别出的登录词列表，B是未登录词列表
-    print "********************************"
-    for t in A:
-        try:
-            print "r:"+t.decode('utf-8')
-        except:
-            pass
-    print "============================" 
-    for t in B:
-        try:
-            print "u:"+t.decode('utf-8')
-        except:
-            pass
+def cuttest(text):
+    wlist = seg.cut(text)
+    wlist.reverse()
+    tmp = " ".join(wlist)
+    print tmp
+    print "================================"
         
 if __name__=="__main__":
-    test1(s3)
-    test1("这是一个伸手不见五指的黑夜。我叫孙君意，我爱北京，我爱Python和C++。")
-    test1("我不喜欢日本和服。")
-    test1("雷猴回归人间。")
-    test1("工信处女干事每月经过下属科室都要亲口交代24口交换机等技术性器件的安装工作")
+    cuttest("这是一个伸手不见五指的黑夜。我叫孙悟空，我爱北京，我爱Python和C++。")
+    cuttest("我不喜欢日本和服。")
+    cuttest("雷猴回归人间。")
+    cuttest("工信处女干事每月经过下属科室都要亲口交代24口交换机等技术性器件的安装工作")
+    cuttest("我需要廉租房")
+    cuttest("永和服装饰品有限公司")
+    cuttest("我爱北京天安门")
+    cuttest("abc")
+    cuttest("隐马尔可夫")
+    cuttest("雷猴是个好网站")
+    cuttest("“Microsoft”一词由“MICROcomputer（微型计算机）”和“SOFTware（软件）”两部分组成")
+    cuttest("草泥马和欺实马是今年的流行词汇")
+    cuttest("伊藤洋华堂总府店")
+    cuttest("中国科学院计算技术研究所")
+    cuttest("罗密欧与朱丽叶")
