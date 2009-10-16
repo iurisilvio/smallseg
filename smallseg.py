@@ -68,7 +68,7 @@ class SEG(object):
                 if mem!=None:
                     i,j,z = mem
                     p = self.d
-                    if(i<ln):
+                    if((i<ln) and (i<z)):
                         recognised.extend(self._pro_unreg(text[i:z]))
                     recognised.append(text[i-j:i])
                     i = i-j

@@ -34,3 +34,4 @@ if __name__=="__main__":
     cuttest("伊藤洋华堂总府店")
     cuttest("中国科学院计算技术研究所")
     cuttest("罗密欧与朱丽叶")
+    cuttest("我购买了道具和服装")
