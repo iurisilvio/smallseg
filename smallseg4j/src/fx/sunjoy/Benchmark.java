@@ -14,7 +14,7 @@ public class Benchmark {
 		for(int i=1;i<101;i++){
 			long start = System.currentTimeMillis();
 			for(int j=0;j<i;j++)
-				seg.cut(text);
+				 seg.cut(text) ;
 			long cost = System.currentTimeMillis()-start;
 			System.out.println(i+"times,cost:"+cost);
 		}

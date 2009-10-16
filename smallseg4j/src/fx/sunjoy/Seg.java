@@ -60,16 +60,20 @@ public class Seg {
 		}
 		
 	}
-	private List<String> _suffix_ary(String s){
+	
+	private List<String> _binary_seg(String s){
 		int ln = s.length();
 		List<String> R = new ArrayList<String>();
-		for(int i=0;i<ln;i++){
-			String tmp = s.substring(i);
-			if(tmp.length()>1)
-				R.add(tmp);
+		if(ln==1){
+			R.add(s);
+			return R;
+		}
+		for(int i=ln;i>1;i--){
+			R.add(s.substring(i-2,i));
 		}
 		return R;
 	}
+	
 	private List<String> findAll(String pattern,String text){
 		List<String> R = new ArrayList<String>();
 		Matcher mc = Pattern.compile(pattern).matcher(text);
@@ -80,34 +84,45 @@ public class Seg {
 	}
 	private List<String> _pro_unreg(String piece){
 		List<String> R = new ArrayList<String>();
-		String[] tmp = piece.replaceAll("。|，|,|！|…|!|《|》|<|>|\"|'|:|：|？|\\?|、|\\||“|”|‘|’|；|—|（|）|·|\\(|\\)|　"," ").split("\\s");
-		for(String ut : tmp){
-			List<String> mc = findAll("([0-9A-Za-z\\-\\+#@_\\.]+)",ut);
-			if(mc.size()>0){
-				R.addAll(mc);
-				String[] han =  ut.split("([0-9A-Za-z\\-\\+#@_\\.]+)");
-				for(String h : han){
-					R.addAll(_suffix_ary(h));
-				}
-			}else{
-				R.addAll(_suffix_ary(ut));
+		String[] tmp = piece.replaceAll("。|，|,|！|…|!|《|》|<|>|\"|'|:|：|？|\\?|、|\\||“|”|‘|’|；|—|（|）|·|\\(|\\)|　|和|的|了"," ").split("\\s");
+		Splitter spliter = new Splitter("([0-9A-Za-z\\-\\+#@_\\.]+)",true);
+		for(int i=tmp.length-1;i>-1;i--){
+			String[] mc = spliter.split(tmp[i]);
+			for(int j=mc.length-1;j>-1;j--){
+				String r = mc[j];
+				if(Pattern.matches("([0-9A-Za-z\\-\\+#@_\\.]+)", r))
+					R.add(r);
+				else
+					R.addAll(_binary_seg(r));
 			}
 		}
 		return R;
 	}
 	
-	public SegResult cut(String text){
+	public List<String> cut(String text){
 		Map<Character,Map> p = d;
 		int ln = text.length();
 		int i=ln;
 		int j=0;
 		int z=ln;
 		List<String> recognised = new ArrayList<String>();
-		List<String> unrecognised = new ArrayList<String>();
+		Integer[] mem = null;
 		
 		while(i-j>0){
 			Character t = Character.toLowerCase(text.charAt(i-1-j));
 			if(!p.containsKey(t)){
+				if(mem!=null){
+					i = mem[0];j=mem[1];z=mem[2];
+					p = d;
+					if(i<ln && i<z)
+						recognised.addAll(_pro_unreg(text.substring(i,z)));
+					recognised.add(text.substring(i-j,i));
+					i = i-j;
+					z = i;
+					j = 0;
+					mem = null;
+					continue;
+				}
 				j = 0;
 				i--;
 				p = d;
@@ -116,20 +131,23 @@ public class Seg {
 			p = p.get(t);
 			j++;
 			if(p.containsKey((char)11)){
+				if(j<=2 && p.size()>1){
+					mem = new Integer[]{i,j,z};
+					continue;
+				}
 				p = d;
+				if(i<ln && i<z)
+					recognised.addAll(_pro_unreg(text.substring(i,z)));
 				recognised.add(text.substring(i-j,i));
-				if(i<ln)
-					unrecognised.addAll(_pro_unreg(text.substring(i,z)));
 				i = i-j;
 				z = i;
 				j = 0;
+				mem = null;
 			}
 		}
-		unrecognised.addAll(_pro_unreg(text.substring(i-j,z)));
-		SegResult result = new SegResult();
-		result.recognised = recognised;
-		result.unrecognised = unrecognised;
-		return result;
+		recognised.addAll(_pro_unreg(text.substring(i-j,z)));
+		
+		return recognised;
 	}
 	
 	public static void main(String[] args) {

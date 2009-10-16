@@ -9,5 +9,7 @@ public class Test {
 		System.out.println(SmallSeg.cut("工信处女干事每月经过下属科室都要亲口交代24口交换机等技术性器件的安装工作"));
 		System.out.println(SmallSeg.cut("我购买了道具和服装。草泥马"));
 		System.out.println(SmallSeg.cut("我爱北京天安门"));
+		System.out.println(SmallSeg.cut("中国科学院"));
+		System.out.println(SmallSeg.cut("雷猴是个好网站"));
 	}
 }

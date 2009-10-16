@@ -10,9 +10,7 @@ public class SmallSeg {
 	}
 	public static List<String> cut(String text){
 		List<String> result = new ArrayList<String>();
-		SegResult sr = seg.cut(text);
-		result.addAll(sr.recognised);
-		result.addAll(sr.unrecognised);
-		return result;
+		List<String> sr = seg.cut(text);
+		return sr;
 	}
 }
