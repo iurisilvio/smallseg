@@ -131,8 +131,14 @@ public class Seg {
 			p = p.get(t);
 			j++;
 			if(p.containsKey((char)11)){
-				if(j<=2 && p.size()>1){
+				if(j<=2){
 					mem = new Integer[]{i,j,z};
+					char xsuffix = text.charAt(i-1);
+					if(xsuffix == '了' || xsuffix=='的'){
+						p = d;
+						i--;
+						j=0;
+					}
 					continue;
 				}
 				p = d;

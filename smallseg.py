@@ -84,8 +84,13 @@ class SEG(object):
             p = p[t]
             j+=1
             if chr(11) in p:
-                if (j<=2) and (len(p)>1):
+                if j<=2:
                     mem = i,j,z
+                    #print text[i-1]
+                    if text[i-1] in (u'了',u'的'):
+                        p = self.d
+                        i -= 1
+                        j = 0
                     continue
                     #print mem
                 p = self.d
