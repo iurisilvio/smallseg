@@ -87,7 +87,7 @@ class SEG(object):
                 if j<=2:
                     mem = i,j,z
                     #print text[i-1]
-                    if text[i-1] in (u'了',u'的'):
+                    if text[i-1] in (u'了',u'的',u'成',u'时'):
                         p = self.d
                         i -= 1
                         j = 0

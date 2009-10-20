@@ -107,7 +107,6 @@ public class Seg {
 		int z=ln;
 		List<String> recognised = new ArrayList<String>();
 		Integer[] mem = null;
-		
 		while(i-j>0){
 			Character t = Character.toLowerCase(text.charAt(i-1-j));
 			if(!p.containsKey(t)){
@@ -134,7 +133,7 @@ public class Seg {
 				if(j<=2){
 					mem = new Integer[]{i,j,z};
 					char xsuffix = text.charAt(i-1);
-					if(xsuffix == '了' || xsuffix=='的'){
+					if(xsuffix == '了' || xsuffix=='的' || xsuffix=='时' || xsuffix=='成'){
 						p = d;
 						i--;
 						j=0;

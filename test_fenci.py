@@ -42,3 +42,6 @@ if __name__=="__main__":
     cuttest("做好了这件事情就一了百了了")
     cuttest("人们审美的观点是不同的")
     cuttest("我们买了一个美的空调")
+    cuttest("线程初始化时我们要注意")
+    cuttest("一个分子是由好多原子组织成的")
+    cuttest("祝你马到功成")
