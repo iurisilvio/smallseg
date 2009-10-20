@@ -2,7 +2,7 @@
 class SEG(object):
     def __init__(self):
         self.d = {}
-    
+        self.stopwords= set([u'了',u'的',u'时',u'上',u'下',u'里',u'外',u'中',u'是',u'有',u'都'])
     #set dictionary(a list)
     def set(self,keywords):
         p = self.d
@@ -36,6 +36,7 @@ class SEG(object):
         return R
     
     def _pro_unreg(self,piece):
+        #print piece
         R = []
         tmp = re.sub(u"。|，|,|！|…|!|《|》|<|>|\"|'|:|：|？|\?|、|\||“|”|‘|’|；|—|（|）|·|\(|\)|　"," ",piece).split()
         ln1 = len(tmp)
@@ -87,7 +88,7 @@ class SEG(object):
                 if j<=2:
                     mem = i,j,z
                     #print text[i-1]
-                    if text[i-1] in (u'了',u'的',u'时',u'上',u'下',u'里',u'外',u'中',u'是'):
+                    if text[i-1] in self.stopwords:
                         p = self.d
                         i -= 1
                         j = 0

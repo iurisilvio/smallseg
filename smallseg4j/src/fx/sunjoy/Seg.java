@@ -22,7 +22,7 @@ public class Seg {
 	private Set<Character> stopWords = new HashSet<Character>();
 	
 	public void useDefaultDict(){
-		stopWords.addAll(Arrays.asList('了','的','时','上','下','里','外','中','是'));
+		stopWords.addAll(Arrays.asList('了','的','时','上','下','里','外','中','是','有','都'));
 		
 		try {
 			InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("fx/sunjoy/dic/main.dic");
