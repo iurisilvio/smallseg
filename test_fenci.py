@@ -46,3 +46,4 @@ if __name__=="__main__":
     cuttest("一个分子是由好多原子组织而成的")
     cuttest("祝你马到功成")
     cuttest("他掉进了无底洞里")
+    cuttest("中国的首都是北京")
