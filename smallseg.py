@@ -2,7 +2,7 @@
 class SEG(object):
     def __init__(self):
         self.d = {}
-        self.stopwords= set([u'了',u'的',u'时',u'上',u'下',u'里',u'外',u'中',u'是',u'有',u'都'])
+        self.stopwords= set([x.rstrip().decode('utf-8') for x in file("suffix.dic")])
     #set dictionary(a list)
     def set(self,keywords):
         p = self.d
@@ -95,7 +95,7 @@ class SEG(object):
                     continue
                     #print mem
                 p = self.d
-                #print i,j
+                #print i,j,z,text[i:z]
                 if((i<ln) and (i<z)):
                     recognised.extend(self._pro_unreg(text[i:z]))
                 recognised.append(text[i-j:i])
@@ -103,6 +103,11 @@ class SEG(object):
                 z = i
                 j = 0
                 mem = None
-       
-        recognised.extend(self._pro_unreg(text[i-j:z]))
+        #print mem
+        if mem!=None:
+            i,j,z = mem
+            recognised.extend(self._pro_unreg(text[i:z]))
+            recognised.append(text[i-j:i])        
+        else:
+            recognised.extend(self._pro_unreg(text[i-j:z]))
         return recognised
