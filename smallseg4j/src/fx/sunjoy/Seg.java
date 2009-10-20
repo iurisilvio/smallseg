@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +21,6 @@ public class Seg {
 	private Set<Character> stopWords = new HashSet<Character>();
 	
 	public void useDefaultDict(){
-		stopWords.addAll(Arrays.asList('了','的','时','上','下','里','外','中','是','有','都'));
-		
 		try {
 			InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("fx/sunjoy/dic/main.dic");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"utf-8"));
@@ -36,6 +33,17 @@ public class Seg {
 			}
 			
 			set(words);
+			is.close();
+			is = Thread.currentThread().getContextClassLoader().getResourceAsStream("fx/sunjoy/dic/suffix.dic");
+			reader = new BufferedReader(new InputStreamReader(is,"utf-8"));
+			words = new ArrayList<String>();
+			while(true){
+				String word = reader.readLine();
+				if(word==null || word.equals(""))
+					break;
+				stopWords.add(word.charAt(0));
+			}
+			
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -156,7 +164,13 @@ public class Seg {
 				mem = null;
 			}
 		}
-		recognised.addAll(_pro_unreg(text.substring(i-j,z)));
+		if(mem!=null){
+			i = mem[0];j=mem[1];z=mem[2];
+			recognised.addAll(_pro_unreg(text.substring(i,z)));
+			recognised.add(text.substring(i-j,i));
+		}
+		else
+			recognised.addAll(_pro_unreg(text.substring(i-j,z)));
 		
 		return recognised;
 	}
