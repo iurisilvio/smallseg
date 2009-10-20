@@ -37,7 +37,7 @@ class SEG(object):
     
     def _pro_unreg(self,piece):
         R = []
-        tmp = re.sub(u"。|，|,|！|…|!|《|》|<|>|\"|'|:|：|？|\?|、|\||“|”|‘|’|；|—|（|）|·|\(|\)|　|和|的|了"," ",piece).split()
+        tmp = re.sub(u"。|，|,|！|…|!|《|》|<|>|\"|'|:|：|？|\?|、|\||“|”|‘|’|；|—|（|）|·|\(|\)|　"," ",piece).split()
         ln1 = len(tmp)
         for i in xrange(len(tmp)-1,-1,-1):
             mc = re.split(r"([0-9A-Za-z\-\+#@_\.]+)",tmp[i])
@@ -87,7 +87,7 @@ class SEG(object):
                 if j<=2:
                     mem = i,j,z
                     #print text[i-1]
-                    if text[i-1] in (u'了',u'的',u'成',u'时'):
+                    if text[i-1] in (u'了',u'的',u'时',u'上',u'下',u'里',u'外',u'中'):
                         p = self.d
                         i -= 1
                         j = 0

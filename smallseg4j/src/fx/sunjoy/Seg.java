@@ -6,8 +6,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,8 +19,11 @@ import java.util.regex.Pattern;
 
 public class Seg {
 	private Map<Character, Map> d = new TreeMap<Character, Map>();
+	private Set<Character> stopWords = new HashSet<Character>();
 	
 	public void useDefaultDict(){
+		stopWords.addAll(Arrays.asList('了','的','时','上','下','里','外','中'));
+		
 		try {
 			InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("fx/sunjoy/dic/main.dic");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"utf-8"));
@@ -84,7 +90,7 @@ public class Seg {
 	}
 	private List<String> _pro_unreg(String piece){
 		List<String> R = new ArrayList<String>();
-		String[] tmp = piece.replaceAll("。|，|,|！|…|!|《|》|<|>|\"|'|:|：|？|\\?|、|\\||“|”|‘|’|；|—|（|）|·|\\(|\\)|　|和|的|了"," ").split("\\s");
+		String[] tmp = piece.replaceAll("。|，|,|！|…|!|《|》|<|>|\"|'|:|：|？|\\?|、|\\||“|”|‘|’|；|—|（|）|·|\\(|\\)|　"," ").split("\\s");
 		Splitter spliter = new Splitter("([0-9A-Za-z\\-\\+#@_\\.]+)",true);
 		for(int i=tmp.length-1;i>-1;i--){
 			String[] mc = spliter.split(tmp[i]);
@@ -132,8 +138,8 @@ public class Seg {
 			if(p.containsKey((char)11)){
 				if(j<=2){
 					mem = new Integer[]{i,j,z};
-					char xsuffix = text.charAt(i-1);
-					if(xsuffix == '了' || xsuffix=='的' || xsuffix=='时' || xsuffix=='成'){
+					Character xsuffix = text.charAt(i-1);
+					if(stopWords.contains(xsuffix)){
 						p = d;
 						i--;
 						j=0;
