@@ -49,3 +49,4 @@ if __name__=="__main__":
     cuttest("中国的首都是北京")
     cuttest("孙君意")
     cuttest("外交部发言人马朝旭")
+    cuttest("领导人会议和第四届东亚峰会")
