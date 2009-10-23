@@ -18,5 +18,7 @@ public class Test {
 		System.out.println(SmallSeg.cut(("我们买了一个美的空调")));
 		System.out.println(SmallSeg.cut(("中国的首都是北京")));
 		System.out.println(SmallSeg.cut(("买水果然后来世博园")));
+		System.out.println(SmallSeg.cut(("还需要很长的路要走")));
+		System.out.println(SmallSeg.cut(("在过去的这五年")));
 	}
 }

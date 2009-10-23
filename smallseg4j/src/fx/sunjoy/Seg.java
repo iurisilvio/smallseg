@@ -83,7 +83,13 @@ public class Seg {
 			return R;
 		}
 		for(int i=ln;i>1;i--){
-			R.add(s.substring(i-2,i));
+			String tmp = s.substring(i-2,i);
+			if(stopWords.contains(tmp.charAt(0))){
+				R.add(tmp.substring(1,2));
+				R.add(tmp.substring(0,1));
+			}
+			else
+				R.add(tmp);
 		}
 		return R;
 	}

@@ -32,7 +32,11 @@ class SEG(object):
         R = []
         for i in xrange(ln,1,-1):
             tmp = s[i-2:i]
-            R.append(tmp)
+            if tmp[0] in self.stopwords:
+                R.append(tmp[1])
+                R.append(tmp[0])
+            else:
+                R.append(tmp)
         return R
     
     def _pro_unreg(self,piece):

@@ -50,3 +50,5 @@ if __name__=="__main__":
     cuttest("孙君意")
     cuttest("外交部发言人马朝旭")
     cuttest("领导人会议和第四届东亚峰会")
+    cuttest("在过去的这五年")
+    cuttest("还需要很长的路要走")
