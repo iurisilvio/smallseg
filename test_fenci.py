@@ -63,3 +63,5 @@ if __name__=="__main__":
     cuttest(" ")
     cuttest("")
     cuttest("hello你好人们审美的观点是不同的")
+    cuttest("为什么我不能拥有想要的生活")
+    cuttest("后来我才")
