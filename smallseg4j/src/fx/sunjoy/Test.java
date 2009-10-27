@@ -19,6 +19,8 @@ public class Test {
 		System.out.println(SmallSeg.cut(("中国的首都是北京")));
 		System.out.println(SmallSeg.cut(("买水果然后来世博园")));
 		System.out.println(SmallSeg.cut(("还需要很长的路要走")));
-		System.out.println(SmallSeg.cut(("在过去的这五年")));
+		System.out.println(SmallSeg.cut(("进行有偿家教谋取私利的行为。续梅表示，在极少数教师身上存在“该讲的内容上课不讲，而是放到课后有偿家教的时候讲”的情况")));
+		System.out.println(SmallSeg.cut(("60周年首都阅兵")));
+		System.out.println(SmallSeg.cut(("hello你好人们审美的观点是不同的")));
 	}
 }

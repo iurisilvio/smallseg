@@ -10,6 +10,8 @@ class SEG(object):
         k = ''
         for word in keywords:
             word = (chr(11)+word).decode('utf-8')
+            if len(word)>5:
+                continue
             p = self.d
             ln = len(word)
             for i in xrange(ln-1,-1,-1):
@@ -66,22 +68,40 @@ class SEG(object):
         z = ln
         recognised = []
         mem = None
+        mem2 = None
+        rct = 0
+        old_rct = 0
         while i-j>0:
             t = text[i-j-1].lower()
             #print i,j,t,mem
             if not (t in p):
-                if mem!=None:
-                    i,j,z = mem
+                old_rct = rct
+                rct = 0
+                if (mem!=None) or (mem2!=None):
+                    if mem!=None:
+                        i,j,z = mem
+                        mem = None
+                    elif mem2!=None:
+                        delta = mem2[0]-i
+                        if delta>1:
+                            #print mem2[0]-i,recognised,mem
+                            if delta<5:
+                                i,j,z = mem2
+                                del recognised[-1*old_rct:]
+                            mem2 = None
+                            
                     p = self.d
                     if((i<ln) and (i<z)):
-                        recognised.extend(self._pro_unreg(text[i:z]))
+                        unreg_tmp = self._pro_unreg(text[i:z])
+                        recognised.extend(unreg_tmp)
+                        rct = rct+len(unreg_tmp)
                     recognised.append(text[i-j:i])
+                    #print text[i-j:i],mem2
+                    rct+=1
                     i = i-j
                     z = i
                     j = 0
-                    mem = None
                     continue
-                
                 j = 0
                 i -= 1
                 p = self.d
@@ -93,6 +113,8 @@ class SEG(object):
                     mem = i,j,z
                     #print text[i-1]
                     if text[i-1] in self.stopwords:
+                        mem = None
+                        mem2 = i,j,z
                         p = self.d
                         i -= 1
                         j = 0
@@ -101,12 +123,16 @@ class SEG(object):
                 p = self.d
                 #print i,j,z,text[i:z]
                 if((i<ln) and (i<z)):
-                    recognised.extend(self._pro_unreg(text[i:z]))
+                    unreg_tmp = self._pro_unreg(text[i:z])
+                    recognised.extend(unreg_tmp)
+                    rct = rct+len(unreg_tmp)
                 recognised.append(text[i-j:i])
+                rct+=1
                 i = i-j
                 z = i
                 j = 0
                 mem = None
+                mem2 = None
         #print mem
         if mem!=None:
             i,j,z = mem
