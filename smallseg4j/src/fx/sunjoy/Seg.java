@@ -126,17 +126,15 @@ public class Seg {
 		int i=ln;
 		int j=0;
 		int z=ln;
+		int q=0;
 		List<String> recognised = new ArrayList<String>();
 		Integer[] mem = null;
 		Integer[] mem2 = null;
-		int rct = 0;
-		int old_rct = 0;
+		
 		while(i-j>0){
 			Character t = Character.toLowerCase(text.charAt(i-1-j));
 			if(!p.containsKey(t)){
 				if(mem!=null || mem2!=null){
-					old_rct = rct;
-					rct = 0;
 					if(mem!=null){
 						i = mem[0];j=mem[1];z=mem[2];
 						mem = null;
@@ -145,10 +143,9 @@ public class Seg {
 						int delta = mem2[0]-i;
 						if(delta>1){
 							if(delta<5){
-								i = mem2[0];j=mem2[1];z=mem2[2];
-								for(int ttt=0;ttt<old_rct;ttt++){
-									if(recognised.size()>0)
-										recognised.remove(recognised.size()-1);
+								i = mem2[0];j=mem2[1];z=mem2[2];q=mem2[3];
+								while(recognised.size()>q){
+									recognised.remove(recognised.size()-1);
 								}
 							}
 							mem2 = null;
@@ -158,10 +155,8 @@ public class Seg {
 					if(i<ln && i<z){
 						List<String > unreg_tmp = _pro_unreg(text.substring(i,z));
 						recognised.addAll(unreg_tmp);
-						rct = rct+unreg_tmp.size();
 					}
 					recognised.add(text.substring(i-j,i));
-					rct++;
 					i = i-j;
 					z = i;
 					j = 0;
@@ -178,9 +173,9 @@ public class Seg {
 				if(j<=2){
 					mem = new Integer[]{i,j,z};
 					Character xsuffix = text.charAt(i-1);
-					if(stopWords.contains(xsuffix)){
+					if((z-i<2) && stopWords.contains(xsuffix)){
 						mem = null;
-						mem2 = new Integer[]{i,j,z};
+						mem2 = new Integer[]{i,j,z,recognised.size()};
 						p = d;
 						i--;
 						j=0;
@@ -191,10 +186,8 @@ public class Seg {
 				if(i<ln && i<z){
 					List<String > unreg_tmp = _pro_unreg(text.substring(i,z));
 					recognised.addAll(unreg_tmp);
-					rct = rct+unreg_tmp.size();
 				}
 				recognised.add(text.substring(i-j,i));
-				rct++;
 				i = i-j;
 				z = i;
 				j = 0;

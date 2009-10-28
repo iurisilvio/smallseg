@@ -3,7 +3,7 @@ package fx.sunjoy;
 public class Test {
 	public static void main(String[] args) throws Exception {
 
-		/*System.out.println(SmallSeg.cut("日照香炉生紫烟，遥看瀑布挂前川。飞流直下三千尺，疑是银河落九天。"));
+		System.out.println(SmallSeg.cut("日照香炉生紫烟，遥看瀑布挂前川。飞流直下三千尺，疑是银河落九天。"));
 		System.out.println(SmallSeg.cut("伊藤洋华堂总府店"));
 		System.out.println(SmallSeg
 				.cut("工信处女干事每月经过下属科室都要亲口交代24口交换机等技术性器件的安装工作"));
@@ -21,7 +21,9 @@ public class Test {
 		System.out.println(SmallSeg.cut(("还需要很长的路要走")));
 		System.out.println(SmallSeg.cut(("进行有偿家教谋取私利的行为。续梅表示，在极少数教师身上存在“该讲的内容上课不讲，而是放到课后有偿家教的时候讲”的情况")));
 		System.out.println(SmallSeg.cut(("60周年首都阅兵")));
-		System.out.println(SmallSeg.cut(("hello你好人们审美的观点是不同的")));*/
+		System.out.println(SmallSeg.cut(("hello你好人们审美的观点是不同的")));
 		System.out.println(SmallSeg.cut(("很好但主要是基于网页形式")));
+		System.out.println(SmallSeg.cut(("但是后来我才知道你是对的")));
+		System.out.println(SmallSeg.cut(("为什么我不能拥有想要的生活")));
 	}
 }

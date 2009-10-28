@@ -66,7 +66,7 @@ class SEG(object):
         i = ln 
         j = 0
         z = ln
-        q = -1
+        q = 0
         recognised = []
         mem = None
         mem2 = None
@@ -106,7 +106,7 @@ class SEG(object):
                 if j<=2:
                     mem = i,j,z
                     #print text[i-1]
-                    if text[i-1] in self.stopwords:
+                    if (z-i<2) and (text[i-1] in self.stopwords):
                         mem = None
                         mem2 = i,j,z,len(recognised)
                         p = self.d
