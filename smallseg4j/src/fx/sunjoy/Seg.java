@@ -136,8 +136,8 @@ public class Seg {
 					}
 					else if(mem2!=null){
 						int delta = mem2[0]-i;
-						if(delta>1){
-							if(delta<5){
+						if(delta>=1){
+							if(delta<5 && Pattern.matches("[\\w\\u2E80-\\u9FFF]",t.toString())){
 								Character pre = text.charAt(i-j);
 								if(!stopWords.contains(pre)){
 									i = mem2[0];j=mem2[1];z=mem2[2];q=mem2[3];
@@ -171,7 +171,7 @@ public class Seg {
 				if(j<=2){
 					mem = new Integer[]{i,j,z};
 					Character xsuffix = text.charAt(i-1);
-					if((z-i<2) && stopWords.contains(xsuffix) && mem2==null){
+					if((z-i<2) && stopWords.contains(xsuffix) && (mem2==null || (mem2!=null && mem2[0]-i>1))){
 						mem = null;
 						mem2 = new Integer[]{i,j,z,recognised.size()};
 						p = d;

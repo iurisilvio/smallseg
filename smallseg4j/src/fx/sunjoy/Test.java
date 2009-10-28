@@ -25,5 +25,7 @@ public class Test {
 		System.out.println(SmallSeg.cut(("很好但主要是基于网页形式")));
 		System.out.println(SmallSeg.cut(("但是后来我才知道你是对的")));
 		System.out.println(SmallSeg.cut(("为什么我不能拥有想要的生活")));
+		System.out.println(SmallSeg.cut(("使用了它就可以解决一些问题")));
+		System.out.println(SmallSeg.cut(("，使用了它就可以解决一些问题")));
 	}
 }

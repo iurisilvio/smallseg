@@ -76,10 +76,10 @@ class SEG(object):
                         mem = None
                     elif mem2!=None:
                         delta = mem2[0]-i
-                        if delta>1:
-                            if delta<5:
+                        if delta>=1:
+                            if (delta<5) and (re.search(ur"[\w\u2E80-\u9FFF]",t)!=None):
                                 pre = text[i-j]
-                                print pre
+                                #print pre
                                 if not (pre in self.stopwords):
                                     i,j,z,q = mem2
                                     del recognised[q:]
@@ -105,7 +105,7 @@ class SEG(object):
                 if j<=2:
                     mem = i,j,z
                     #print text[i-1]
-                    if (z-i<2) and (text[i-1] in self.stopwords) and (mem2==None):
+                    if (z-i<2) and (text[i-1] in self.stopwords) and ((mem2==None) or ((mem2!=None and mem2[0]-i>1))):
                         #print text[i-1]
                         mem = None
                         mem2 = i,j,z,len(recognised)
