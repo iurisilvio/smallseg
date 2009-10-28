@@ -85,12 +85,7 @@ public class Seg {
 		}
 		for(int i=ln;i>1;i--){
 			String tmp = s.substring(i-2,i);
-			if(stopWords.contains(tmp.charAt(0))){
-				R.add(tmp.substring(1,2));
-				R.add(tmp.substring(0,1));
-			}
-			else
-				R.add(tmp);
+			R.add(tmp);
 		}
 		return R;
 	}
@@ -143,9 +138,12 @@ public class Seg {
 						int delta = mem2[0]-i;
 						if(delta>1){
 							if(delta<5){
-								i = mem2[0];j=mem2[1];z=mem2[2];q=mem2[3];
-								while(recognised.size()>q){
-									recognised.remove(recognised.size()-1);
+								Character pre = text.charAt(i-j);
+								if(!stopWords.contains(pre)){
+									i = mem2[0];j=mem2[1];z=mem2[2];q=mem2[3];
+									while(recognised.size()>q){
+										recognised.remove(recognised.size()-1);
+									}
 								}
 							}
 							mem2 = null;
@@ -173,7 +171,7 @@ public class Seg {
 				if(j<=2){
 					mem = new Integer[]{i,j,z};
 					Character xsuffix = text.charAt(i-1);
-					if((z-i<2) && stopWords.contains(xsuffix)){
+					if((z-i<2) && stopWords.contains(xsuffix) && mem2==null){
 						mem = null;
 						mem2 = new Integer[]{i,j,z,recognised.size()};
 						p = d;

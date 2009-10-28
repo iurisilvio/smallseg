@@ -34,11 +34,7 @@ class SEG(object):
         R = []
         for i in xrange(ln,1,-1):
             tmp = s[i-2:i]
-            if tmp[0] in self.stopwords:
-                R.append(tmp[1])
-                R.append(tmp[0])
-            else:
-                R.append(tmp)
+            R.append(tmp)
         return R
     
     def _pro_unreg(self,piece):
@@ -82,8 +78,11 @@ class SEG(object):
                         delta = mem2[0]-i
                         if delta>1:
                             if delta<5:
-                                i,j,z,q = mem2
-                                del recognised[q:]
+                                pre = text[i-j]
+                                print pre
+                                if not (pre in self.stopwords):
+                                    i,j,z,q = mem2
+                                    del recognised[q:]
                             mem2 = None
                             
                     p = self.d
@@ -106,7 +105,8 @@ class SEG(object):
                 if j<=2:
                     mem = i,j,z
                     #print text[i-1]
-                    if (z-i<2) and (text[i-1] in self.stopwords):
+                    if (z-i<2) and (text[i-1] in self.stopwords) and (mem2==None):
+                        #print text[i-1]
                         mem = None
                         mem2 = i,j,z,len(recognised)
                         p = self.d
