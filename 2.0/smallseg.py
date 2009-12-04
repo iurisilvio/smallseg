@@ -47,7 +47,7 @@ def rank(solu,hanSentence):
                     ct+=2**len(buf)
             if pre_buf in g_dict:
                 pp1 = g_dict[pre_buf][1]
-                if pp1.find('N,')!=-1 and buf in (u'是',u'的',u'和'):
+                if pp1.find('N,')!=-1 and buf in (u'是',u'的'):
                     ct+=20
             pre_buf = buf
             buf = hanSentence[i+1]
