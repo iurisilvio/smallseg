@@ -1,7 +1,10 @@
 ﻿#encoding=utf-8
+import re
 import math
 import random
 import bisect
+import psyco
+psyco.full()
 
 def readDict():
     d ={}
@@ -16,10 +19,11 @@ def readDict():
 
 g_dict = readDict()
 
+
 def rank(solu,hanSentence):
     buf = hanSentence[0]
-    ct = solu.count(1)
-    pre_buf = None
+    ct = 0
+    pre_buf = ''
     for i in xrange(0,len(solu)):
         b = solu[i]
         if b ==0:
@@ -27,7 +31,7 @@ def rank(solu,hanSentence):
         else:
             if buf in g_dict:
                 #print g_dict[buf][0]
-                if pre_buf:
+                if pre_buf in g_dict:
                     pp1 = g_dict[pre_buf][1]
                     pp2 = g_dict[buf][1]
                     if pp1.find('ADV,')!=-1 and pp2=='V,':
@@ -37,14 +41,20 @@ def rank(solu,hanSentence):
                     if pp1=='ADJ,' and pp2.find('N,')!=-1:
                         ct+=20
                     if pp1=='CLAS,' and pp2.find('N,')!=-1:
-                        ct+=20
-                ct+= math.log(g_dict[buf][0])
-                pre_buf = buf
-
+                        ct+=20         
+                ct+= math.log(g_dict[buf][0]+1)
+                if len(buf)==3 or len(buf)==4:
+                    ct+=2**len(buf)
+            if pre_buf in g_dict:
+                pp1 = g_dict[pre_buf][1]
+                if pp1.find('N,')!=-1 and buf in (u'是',u'的',u'和'):
+                    ct+=20
+            pre_buf = buf
             buf = hanSentence[i+1]
     if buf in g_dict:
-        ct+= math.log(g_dict[buf][0])
-
+        ct+= math.log(g_dict[buf][0]+1)
+        if len(buf)==3 or len(buf)==4:
+            ct+=2**len(buf)
     return ct
 
 def output(solu,hanSentence):
@@ -158,12 +168,29 @@ def segHanAnt(hanSentence):
             best_solu = solu
             best = onetry
         evaporate(phers,boost,maxiter)
-    print phers
+    #print phers
     return output(best_solu,hanSentence)
 
-def cuttest(s):
+def cut(s):
     s = s.decode('utf-8')
-    print ' '.join(segHanGen(s))
+    words = segHanAnt(s)
+    result=[]
+    buf  = ''
+    for w in words:
+        if re.search(ur'\w+',w):
+            buf+=w
+        else:
+            if len(buf)>0:
+                result.append(buf)
+                buf=''
+            result.append(w)
+    if len(buf)>0:
+        result.append(buf)
+        buf=''
+    return result
+    
+def cuttest(s):
+    print ' '.join(cut(s))
 
 if __name__ == "__main__":
     cuttest("这是一个伸手不见五指的黑夜。我叫孙悟空，我爱北京，我爱Python和C++。")
