@@ -1,6 +1,7 @@
 ﻿#encoding=utf-8
 import math
 import random
+import bisect
 
 def readDict():
     d ={}
@@ -58,7 +59,25 @@ def output(solu,hanSentence):
             buf = hanSentence[i+1]
     result.append(buf)
     return result
-    
+
+def weightedRandomChoice(weights):
+    tmp = [0]*len(weights)
+    sum  = 0
+    for i in xrange(0,len(weights)):
+        sum += weights[i]
+        tmp[i]=sum
+    c = random.random()*tmp[-1]
+    return bisect.bisect(tmp,c)
+
+def weightedRandomChoice2(weights):
+    c = random.random()*sum(weights)
+    next = 0
+    for i in xrange(0,len(weights)):
+        next = i
+        if weights[i]>=c:
+            break
+    return next
+
 def segHanGen(hanSentence):
     def fun_mute(solu):
         n_solu = solu[:]
@@ -98,4 +117,36 @@ def segHanGen(hanSentence):
     return output(population[0],hanSentence)
     
 def segHanAnt(hanSentence):
-    pass
+    def boostPher(phers,solu,boost):
+        for i in xrange(0,len(phers)):
+            phers[i][solu[i]]+=boost
+    
+    def evaporate(phers,boost,maxiter):
+        delta = float(boost)/maxiter
+        for ph in phers:
+            ph[0]-=  delta
+            ph[1]-=  delta
+        
+    n = len(hanSentence)-1
+    if n<=1: return hanSentence
+    maxiter = 1000
+    boost = 5
+    phers = [[boost,boost] for i in xrange(0,n)]
+    best  = None
+    best_solu = None
+    onetry = 0
+    for i in xrange(0,maxiter):
+        solu =[]
+        for ph in phers:
+            solu.append(weightedRandomChoice(ph))
+        #print solu
+        onetry = rank(solu,hanSentence)
+        if best==None:
+            best = onetry
+        if onetry>best:
+            boostPher(phers,solu,boost)
+            best_solu = solu
+            best = onetry
+        evaporate(phers,boost,maxiter)
+    print phers
+    return output(best_solu,hanSentence)
