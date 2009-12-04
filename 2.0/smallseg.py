@@ -126,6 +126,10 @@ def segHanAnt(hanSentence):
         for ph in phers:
             ph[0]-=  delta
             ph[1]-=  delta
+            if ph[0]<0:
+                ph[0]=0
+            if ph[1]<0:
+                ph[1]=0
         
     n = len(hanSentence)-1
     if n<=1: return hanSentence
@@ -137,12 +141,15 @@ def segHanAnt(hanSentence):
     onetry = 0
     for i in xrange(0,maxiter):
         solu =[]
-        for ph in phers:
+        for j,ph in enumerate(phers):
+            if (not hanSentence[j:j+2] in g_dict) and (not hanSentence[j:j+3] in g_dict) and (not hanSentence[j-1:j+1] in g_dict) and (not hanSentence[j-1:j] in g_dict):
+                ph[1]*=2
             solu.append(weightedRandomChoice(ph))
         #print solu
         onetry = rank(solu,hanSentence)
         if best==None:
             best = onetry
+            best_solu = solu
         if onetry>best:
             boostPher(phers,solu,boost)
             best_solu = solu
