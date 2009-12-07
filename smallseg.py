@@ -1,8 +1,16 @@
 ﻿import re
+import os
+import sys
 class SEG(object):
     def __init__(self):
+        _localDir=os.path.dirname(__file__)
+        _curpath=os.path.normpath(os.path.join(os.getcwd(),_localDir))
+        curpath=_curpath
         self.d = {}
-        self.stopwords= set([x.rstrip().decode('utf-8') for x in file("suffix.dic")])
+        print >> sys.stderr,"loading dict..."
+        self.set([x.rstrip() for x in file(os.path.join(curpath,"main.dic")) ])
+        self.specialwords= set([x.rstrip().decode('utf-8') for x in file(os.path.join(curpath,"suffix.dic"))])
+        print >> sys.stderr,'dict ok.'
     #set dictionary(a list)
     def set(self,keywords):
         p = self.d
@@ -80,7 +88,7 @@ class SEG(object):
                             if (delta<5) and (re.search(ur"[\w\u2E80-\u9FFF]",t)!=None):
                                 pre = text[i-j]
                                 #print pre
-                                if not (pre in self.stopwords):
+                                if not (pre in self.specialwords):
                                     i,j,z,q = mem2
                                     del recognised[q:]
                             mem2 = None
@@ -105,7 +113,7 @@ class SEG(object):
                 if j<=2:
                     mem = i,j,z
                     #print text[i-1]
-                    if (z-i<2) and (text[i-1] in self.stopwords) and ((mem2==None) or ((mem2!=None and mem2[0]-i>1))):
+                    if (z-i<2) and (text[i-1] in self.specialwords) and ((mem2==None) or ((mem2!=None and mem2[0]-i>1))):
                         #print text[i-1]
                         mem = None
                         mem2 = i,j,z,len(recognised)
