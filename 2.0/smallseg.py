@@ -42,10 +42,10 @@ def rank(solu,hanSentence):
                     if pp1=='ADJ,' and pp2.find('N,')!=-1:
                         ct+=50
                     if pp1=='CLAS,' and pp2.find('N,')!=-1:
-                        ct+=50         
+                        ct+=50    
                 ct+= math.log(g_dict[buf][0]+1)
                 if len(buf)==3 or len(buf)==4:
-                    ct+=2**len(buf)
+                    ct+=3**len(buf)
 
             if pre_buf in g_dict:
                 pp1 = g_dict[pre_buf][1]
@@ -56,7 +56,7 @@ def rank(solu,hanSentence):
     if buf in g_dict:
         ct+= math.log(g_dict[buf][0]+1)
         if len(buf)==3 or len(buf)==4:
-            ct+=2**len(buf)
+            ct+=3**len(buf)
 
     return ct
 
