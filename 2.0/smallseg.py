@@ -12,6 +12,7 @@ def readDict():
         #print line
         tup = line.split('\t')
         word = tup[0].decode('utf-8')
+        if len(word)>4:continue
         freq = float(tup[1])
         prop = tup[2].rstrip()
         d[word]=(freq,prop)
@@ -22,7 +23,7 @@ g_dict = readDict()
 
 def rank(solu,hanSentence):
     buf = hanSentence[0]
-    ct = solu.count(1)
+    ct = 0
     pre_buf = ''
     for i in xrange(0,len(solu)):
         b = solu[i]
@@ -35,16 +36,17 @@ def rank(solu,hanSentence):
                     pp1 = g_dict[pre_buf][1]
                     pp2 = g_dict[buf][1]
                     if pp1.find('ADV,')!=-1 and pp2=='V,':
-                        ct+=20
+                        ct+=50
                     if pp1=='V,' and pp2.find('N,')!=-1:
-                        ct+=20
+                        ct+=50
                     if pp1=='ADJ,' and pp2.find('N,')!=-1:
-                        ct+=20
+                        ct+=50
                     if pp1=='CLAS,' and pp2.find('N,')!=-1:
-                        ct+=20         
+                        ct+=50         
                 ct+= math.log(g_dict[buf][0]+1)
                 if len(buf)==3 or len(buf)==4:
                     ct+=2**len(buf)
+
             if pre_buf in g_dict:
                 pp1 = g_dict[pre_buf][1]
                 if pp1.find('N,')!=-1 and buf in (u'是',u'的'):
@@ -55,6 +57,7 @@ def rank(solu,hanSentence):
         ct+= math.log(g_dict[buf][0]+1)
         if len(buf)==3 or len(buf)==4:
             ct+=2**len(buf)
+
     return ct
 
 def output(solu,hanSentence):
@@ -130,6 +133,9 @@ def segHanAnt(hanSentence):
     def boostPher(phers,solu,boost):
         for i in xrange(0,len(phers)):
             phers[i][solu[i]]+=boost
+    def reducePher(phers,solu):
+        for i in xrange(0,len(phers)):
+            phers[i][solu[i]]/=2
     
     def evaporate(phers,boost,maxiter):
         delta = float(boost)/maxiter
@@ -140,10 +146,26 @@ def segHanAnt(hanSentence):
                 ph[0]=0
             if ph[1]<0:
                 ph[1]=0
-        
+    
+    def getDefaultSolution(hanSentence):
+        solu =[0]*(len(hanSentence)-1)
+        i = 0
+        j = 0
+        while i<len(hanSentence):
+            for j in (3,2,1):
+                if i+j+1>len(hanSentence):continue
+                ph = hanSentence[i:i+j+1]
+                if ph in g_dict:
+                    i+=j
+                    break
+            i+=1
+            if i-1<len(solu):
+                solu[i-1]=1
+        return solu
+    
     n = len(hanSentence)-1
     if n<=1: return hanSentence
-    maxiter = 1000
+    maxiter = 100
     boost = 5
     phers = [[boost,boost] for i in xrange(0,n)]
     best  = None
@@ -151,19 +173,25 @@ def segHanAnt(hanSentence):
     onetry = 0
     for i in xrange(0,maxiter):
         solu =[]
-        for j,ph in enumerate(phers):
-            w = ph[:]
-            if (hanSentence[j:j+2] in g_dict) or (hanSentence[j:j+3] in g_dict) or (hanSentence[j-1:j+2] in g_dict):
-                w[0]*=2
-            else:
-                w[1]*=2
-            solu.append(weightedRandomChoice(w))
+        if best==None:
+            solu = getDefaultSolution(hanSentence)
+            reducePher(phers,solu)
+        else:
+            for j,ph in enumerate(phers):
+                w = ph[:]
+                if (hanSentence[j:j+2] in g_dict) or (hanSentence[j:j+3] in g_dict) or (hanSentence[j-1:j+2] in g_dict):
+                    w[0]*=2
+                else:
+                    w[1]*=4
+                if (hanSentence[j+1:j+3] in g_dict):
+                    w[1]*=8
+                solu.append(weightedRandomChoice(w))
         #print solu
         onetry = rank(solu,hanSentence)
         if best==None:
             best = onetry
             best_solu = solu
-        if onetry>best:
+        if onetry>=best:
             boostPher(phers,solu,boost)
             best_solu = solu
             best = onetry
@@ -250,3 +278,6 @@ if __name__ == "__main__":
     cuttest("老年搜索还支持")
     cuttest("干脆就把那部蒙人的闲法给废了拉倒！RT @laoshipukong : 27日，全国人大常委会第三次审议侵权责任法草案，删除了有关医疗损害责任“举证倒置”的规定。在医患纠纷中本已处于弱势地位的消费者由此将陷入万劫不复的境地。 ")
     cuttest("辛勤的蜜蜂永没有时间悲哀")
+    cuttest("画上荷花和尚画")
+    cuttest("北京大学生物理论论坛")
+    cuttest("乒乓球拍卖完了")
