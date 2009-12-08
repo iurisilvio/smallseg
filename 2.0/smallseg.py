@@ -1,4 +1,4 @@
-﻿#encoding=utf-8
+#encoding=utf-8
 import re
 import math
 import random
@@ -154,9 +154,9 @@ def segHanAnt(hanSentence):
         for j,ph in enumerate(phers):
             w = ph[:]
             if (hanSentence[j:j+2] in g_dict) or (hanSentence[j:j+3] in g_dict) or (hanSentence[j-1:j+2] in g_dict):
-                w[0]*=2
+                w[0]+=20
             else:
-                w[1]*=2
+                w[1]+=20
             solu.append(weightedRandomChoice(w))
         #print solu
         onetry = rank(solu,hanSentence)
@@ -249,3 +249,4 @@ if __name__ == "__main__":
     cuttest("是因为和国家")
     cuttest("老年搜索还支持")
     cuttest("干脆就把那部蒙人的闲法给废了拉倒！RT @laoshipukong : 27日，全国人大常委会第三次审议侵权责任法草案，删除了有关医疗损害责任“举证倒置”的规定。在医患纠纷中本已处于弱势地位的消费者由此将陷入万劫不复的境地。 ")
+    cuttest("辛勤的蜜蜂永没有时间悲哀")
