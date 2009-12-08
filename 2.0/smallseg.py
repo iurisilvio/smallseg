@@ -20,7 +20,22 @@ def readDict():
 
 g_dict = readDict()
 
-
+def getDefaultSolution(hanSentence):
+    solu =[0]*(len(hanSentence)-1)
+    i = 0
+    j = 0
+    while i<len(hanSentence):
+        for j in (3,2,1):
+            if i+j+1>len(hanSentence):continue
+            ph = hanSentence[i:i+j+1]
+            if ph in g_dict:
+                i+=j
+                break
+        i+=1
+        if i-1<len(solu):
+            solu[i-1]=1
+    return solu
+        
 def rank(solu,hanSentence):
     buf = hanSentence[0]
     ct = 0
@@ -107,11 +122,13 @@ def segHanGen(hanSentence):
     
     n = len(hanSentence)-1
     if n<=1: return hanSentence
-    pop_size = 50
+    pop_size = 10
     elite=0.2
     mute=0.2
-    maxiter=100
+    maxiter=30
     population = [[random.randint(0,1) for i in xrange(0,n) ] for j in xrange(pop_size)]
+    population[0]= getDefaultSolution(hanSentence)
+    
     i_elite = int(elite*pop_size)
     for i in xrange(maxiter):
         population = [s for (r,s) in sorted([(rank(solu,hanSentence),solu) for solu in population],reverse=True)]
@@ -147,21 +164,7 @@ def segHanAnt(hanSentence):
             if ph[1]<0:
                 ph[1]=0
     
-    def getDefaultSolution(hanSentence):
-        solu =[0]*(len(hanSentence)-1)
-        i = 0
-        j = 0
-        while i<len(hanSentence):
-            for j in (3,2,1):
-                if i+j+1>len(hanSentence):continue
-                ph = hanSentence[i:i+j+1]
-                if ph in g_dict:
-                    i+=j
-                    break
-            i+=1
-            if i-1<len(solu):
-                solu[i-1]=1
-        return solu
+    
     
     n = len(hanSentence)-1
     if n<=1: return hanSentence
@@ -201,7 +204,7 @@ def segHanAnt(hanSentence):
 
 def cut(s):
     s = s.decode('utf-8')
-    words = segHanAnt(s)
+    words = segHanGen(s)
     result=[]
     buf  = ''
     for w in words:
