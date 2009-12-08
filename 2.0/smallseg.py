@@ -281,3 +281,4 @@ if __name__ == "__main__":
     cuttest("画上荷花和尚画")
     cuttest("北京大学生物理论论坛")
     cuttest("乒乓球拍卖完了")
+    cuttest('他从马上摔下来了。你马上下来一下')
