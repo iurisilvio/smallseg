@@ -168,7 +168,7 @@ def segHanAnt(hanSentence):
     
     n = len(hanSentence)-1
     if n<=1: return hanSentence
-    maxiter = 100
+    maxiter = 1000
     boost = 5
     phers = [[boost,boost] for i in xrange(0,n)]
     best  = None
@@ -204,7 +204,7 @@ def segHanAnt(hanSentence):
 
 def cut(s):
     s = s.decode('utf-8')
-    words = segHanGen(s)
+    words = segHanAnt(s)
     result=[]
     buf  = ''
     for w in words:
@@ -285,3 +285,4 @@ if __name__ == "__main__":
     cuttest("北京大学生物理论论坛")
     cuttest("乒乓球拍卖完了")
     cuttest('他从马上摔下来了。你马上下来一下')
+    cuttest('不是整个的统计词频。而是一篇文章中出现的词的频率，如何统计，莫非把分出的词再来一个聚合？')
